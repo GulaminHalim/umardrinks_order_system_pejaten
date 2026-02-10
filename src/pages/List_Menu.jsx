@@ -10,7 +10,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Modal from "react-bootstrap/Modal";
 import MenuCard from "./MenuCard";
 import { data_order_list } from "../model/Data_Order";
-import { AlignCenter, Search, X } from "lucide-react";
+import { AlignCenter, Search, X, ShoppingCart } from "lucide-react";
 import "../style.css";
 
 export default function List_Menu() {
@@ -18,6 +18,7 @@ export default function List_Menu() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [isStickySearch, setIsStickySearch] = useState(false);
 
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
@@ -43,8 +44,21 @@ export default function List_Menu() {
     return () => clearTimeout(timer);
   }, [search]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 120) {
+        setIsStickySearch(true);
+      } else {
+        setIsStickySearch(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const filteredMenu = data_order_list.filter((item) =>
-    item.name.toLowerCase().includes(debouncedSearch.toLowerCase())
+    item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
   );
 
   const handleCheckout = () => {
@@ -60,7 +74,11 @@ export default function List_Menu() {
       <h2 className="text-center mb-4 fw-bold">List Menu</h2>
 
       {/* SEARCH */}
-      <div className="search-wrapper mb-4">
+      <div
+        className={`search-wrapper mb-4 ${
+          isStickySearch ? "search-sticky" : ""
+        }`}
+      >
         <InputGroup className="search-input shadow-sm">
           <InputGroup.Text className="bg-white border-0">
             <Search size={18} className="text-muted" />
@@ -100,7 +118,7 @@ export default function List_Menu() {
 
       {filteredMenu.length > 0 && (
         <Button
-          id="btn"
+          id="checkout-main"
           className="btn-modern w-100 mt-3"
           onClick={handleCheckout}
         >
@@ -132,11 +150,11 @@ export default function List_Menu() {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Attention</Modal.Title>
+          <Modal.Title>Hello..!</Modal.Title>
         </Modal.Header>
 
         <Modal.Body className="text-center">
-          <p>Hello! Welcome to Umar Drinks...</p>
+          <p>Welcome to Umar Drinks...</p>
         </Modal.Body>
 
         <Modal.Footer>
@@ -145,6 +163,19 @@ export default function List_Menu() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {filteredMenu.length > 0 && (
+        <Button
+          className="floating-checkout"
+          onClick={() => {
+            const target = document.getElementById("checkout-main");
+            target?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
+          <ShoppingCart size={16} className="me-2" />
+          Checkout
+        </Button>
+      )}
     </Container>
   );
 }

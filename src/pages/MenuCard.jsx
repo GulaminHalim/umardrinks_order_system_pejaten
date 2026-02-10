@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { addToCart } from "../redux/slices/cartSlice";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 export default function MenuCard({ item }) {
   const [qty, setQty] = useState(0);
@@ -27,7 +28,7 @@ export default function MenuCard({ item }) {
         name: item.name,
         price: item.price,
         qty: qty,
-      })
+      }),
     );
     setQty(0);
     //alert(`${qty} ${item.name} added to cart!`);
@@ -44,6 +45,13 @@ export default function MenuCard({ item }) {
 
       <Card.Body className="d-flex flex-column">
         <Card.Title>{item.name}</Card.Title>
+        <Link
+          to={`/detail/${item.id}`}
+          className="text-primary mb-2"
+          style={{ fontSize: "14px", textDecoration: "none" }}
+        >
+          Detail Produk
+        </Link>
         <Card.Text className="text-muted" style={{ fontSize: "20px" }}>
           Rp {item.price}
         </Card.Text>

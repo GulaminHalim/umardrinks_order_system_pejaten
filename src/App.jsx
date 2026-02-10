@@ -9,6 +9,7 @@ import Payment from "./pages/Payment";
 import Information_System from "./pages/Information_System";
 import Cashier from "./pages/Cashier";
 import Thankyou from "./pages/Thankyou";
+import Detail_Page from "./pages/Detail_Page";
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
       <Route path="/order_sent" element={<Order_Sent />} />
 
       <Route path="/menu_card" element={<MenuCard />} />
+
+      <Route path="/detail/:id" element={<Detail_Page />} />
 
       <Route path="/payment" element={<Payment />} />
 
