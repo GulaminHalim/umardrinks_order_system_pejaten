@@ -65,8 +65,8 @@ export default function Payment() {
 
   // Hitung total
   const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.qty,
-    0
+    (acc, item) => acc + item.price * item.qty,
+    0,
   );
 
   return (

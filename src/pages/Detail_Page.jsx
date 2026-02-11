@@ -23,7 +23,11 @@ export default function Detail_Page() {
 
   return (
     <Container className="py-4">
-      <Button variant="link" onClick={() => navigate(-1)}>
+      <Button
+        variant="link"
+        className="text-decoration-none"
+        onClick={() => navigate(-1)}
+      >
         ← Kembali
       </Button>
 

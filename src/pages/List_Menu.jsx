@@ -115,7 +115,6 @@ export default function List_Menu() {
           <p className="text-center text-muted">Menu tidak ditemukan...</p>
         )}
       </Row>
-
       {filteredMenu.length > 0 && (
         <Button
           id="checkout-main"
@@ -125,7 +124,6 @@ export default function List_Menu() {
           Checkout
         </Button>
       )}
-
       {/* MODAL */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
@@ -142,7 +140,6 @@ export default function List_Menu() {
           </Button>
         </Modal.Footer>
       </Modal>
-
       {/* WELCOME MODAL */}
       <Modal
         show={showWelcomeModal}
@@ -163,7 +160,6 @@ export default function List_Menu() {
           </Button>
         </Modal.Footer>
       </Modal>
-
       {filteredMenu.length > 0 && (
         <Button
           className="floating-checkout"

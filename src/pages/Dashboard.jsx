@@ -16,7 +16,7 @@ export default function Dashboard() {
   const dispatch = useDispatch();
 
   const hasNewOrder = useSelector(
-    (state) => state.orderNotification.hasNewOrder
+    (state) => state.orderNotification.hasNewOrder,
   );
 
   const handleOrderSentClick = () => {
@@ -54,9 +54,9 @@ export default function Dashboard() {
         {/* KASIR */}
         <Col md={6} lg={3}>
           <Card
-            className="h-100 shadow-sm text-center"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/cashier")}
+            className="h-100 shadow-sm text-center opacity-50"
+            style={{ cursor: "not-allowed", pointerEvents: "none" }}
+            // onClick={() => navigate("/cashier")}
           >
             <Card.Body>
               <div className="text-success mb-3">
@@ -92,9 +92,9 @@ export default function Dashboard() {
         {/* INFORMATION SYSTEM */}
         <Col md={6} lg={3}>
           <Card
-            className="h-100 shadow-sm text-center"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/information_system")}
+            className="h-100 shadow-sm text-center opacity-50"
+            style={{ cursor: "not-allowed", pointerEvents: "none" }}
+            //onClick={() => navigate("/information_system")}
           >
             <Card.Body>
               <div className="text-primary mb-3">
