@@ -64,7 +64,7 @@ export default function Order_Sent() {
 
     const resetNotification = async () => {
       const pendingOrders = orders.filter(
-        (order) => order.hasNewOrder === true
+        (order) => order.hasNewOrder === true,
       );
 
       for (const order of pendingOrders) {
@@ -86,8 +86,21 @@ export default function Order_Sent() {
     });
   };
 
+  const formatDateTime = (timestamp) => {
+    if (!timestamp) return "-";
+
+    const date = timestamp.toDate(); // convert Firestore Timestamp
+    return date.toLocaleString("id-ID", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
-    <Container className="py-4" style={{ maxWidth: "800px" }}>
+    <Container className="py-4" style={{ maxWidth: "1000px" }}>
       {/* BACK BUTTON */}
       <Button
         variant="link"
@@ -108,6 +121,10 @@ export default function Order_Sent() {
             <Card.Body>
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <div>
+                  <small className="text-muted">
+                    {formatDateTime(order.createdAt)}
+                  </small>
+                  <br />
                   <strong>Customer:</strong> {order.customerName}
                   <br />
                   <strong>Total:</strong> Rp {order.totalPrice}

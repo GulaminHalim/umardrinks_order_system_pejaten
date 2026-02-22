@@ -1,5 +1,5 @@
 import React from "react";
-import thankyouImage from "../assets/images/thankyou_image.png";
+import thankyouImage from "../assets/images/thankyou_image.jpeg";
 
 export default function Thankyou() {
   return (
