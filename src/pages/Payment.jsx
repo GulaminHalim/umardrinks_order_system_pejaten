@@ -19,6 +19,7 @@ export default function Payment() {
   const navigate = useNavigate();
   const [customerName, setCustomerName] = useState("");
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [paymentType, setPaymentType] = useState("cash");
 
   function alertToOrderSent() {
     Swal.fire({
@@ -33,6 +34,7 @@ export default function Payment() {
     try {
       await addDoc(collection(db, "orders"), {
         customerName: customerName,
+        paymentType: paymentType,
         items: cartItems,
         totalPrice: totalPrice,
         status: "pending",
@@ -120,6 +122,30 @@ export default function Payment() {
             </div>
 
             <Form className="mb-3">
+              <Form.Group className="mb-3">
+                <Form.Label>Tipe Pembayaran</Form.Label>
+
+                <div>
+                  <Form.Check
+                    type="radio"
+                    label="Cash"
+                    name="paymentType"
+                    value="cash"
+                    checked={paymentType === "cash"}
+                    onChange={(e) => setPaymentType(e.target.value)}
+                  />
+
+                  <Form.Check
+                    type="radio"
+                    label="QRIS"
+                    name="paymentType"
+                    value="qris"
+                    checked={paymentType === "qris"}
+                    onChange={(e) => setPaymentType(e.target.value)}
+                  />
+                </div>
+              </Form.Group>
+
               <Form.Group className="mb-3">
                 <Form.Label>Nama Pemesan</Form.Label>
                 <Form.Control

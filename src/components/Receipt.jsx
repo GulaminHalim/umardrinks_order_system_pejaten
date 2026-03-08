@@ -7,17 +7,22 @@ const Receipt = forwardRef(({ order }, ref) => {
       style={{ width: "280px", padding: "10px", fontSize: "12px" }}
     >
       <h5 style={{ textAlign: "center" }}>UMAR DRINKS</h5>
-      <p style={{ textAlign: "center" }}>- Depan UNAS -</p>
-      <p style={{ textAlign: "center" }}>
-        Alpukat kocok, Durian kocok, and Dimsum
+      <p style={{ textAlign: "center", fontSize: "16px", margin: "0" }}>
+        Potato Bolognese, Mac & Cheese, <br /> Fire Chicken Popcorn
       </p>
-      <p style={{ textAlign: "center" }}>
+      <p style={{ textAlign: "center", margin: "0" }}>
+        (Seberang gerbang UNAS Pasar Minggu)
+      </p>
+      <p style={{ textAlign: "center", margin: "0 0 30px 0" }}>
         Jl. Sawo Manila, Jati Padang, Jakarta Selatan
       </p>
+      <p style={{ margin: "0" }}> Phone/Wa : 085891266106</p>
+
       <hr />
 
-      <p>Customer: {order.customerName}</p>
       <p>Tanggal: {new Date().toLocaleString()}</p>
+      <p>Customer: {order.customerName}</p>
+      <p>Tipe pembayaran: {order.paymentType}</p>
       <hr />
 
       {order.items.map((item, i) => (

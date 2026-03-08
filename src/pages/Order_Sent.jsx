@@ -127,6 +127,8 @@ export default function Order_Sent() {
                   <br />
                   <strong>Customer:</strong> {order.customerName}
                   <br />
+                  <strong>Payment type:</strong> {order.paymentType}
+                  <br />
                   <strong>Total:</strong> Rp {order.totalPrice}
                 </div>
 
