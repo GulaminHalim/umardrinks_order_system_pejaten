@@ -58,7 +58,7 @@ export default function Payment() {
   const cartItems = useSelector((state) => state.cart.items);
 
   if (orderSuccess) {
-    return <Navigate to="/thankyou" replace />;
+    return <Navigate to="/order_sent" replace />;
   }
 
   if (cartItems.length === 0) {
