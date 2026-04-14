@@ -37,22 +37,37 @@ export default function Order_Sent() {
 
     let text = "";
 
+    // RESET PRINTER
     text += "\x1B\x40";
-    text += "\x1B\x61\x01";
-    text += "\x1B\x45\x01";
-    text += "UMAR DRINKS\n";
-    text += "\x1B\x45\x00";
+
+    // 🔥 HEADER ATAS
+    text += "\x1B\x61\x01"; // center
+    text += "\x1D\x21\x11"; // double size
+    text += "UMAR DRINKS POTATO BOLOGNESE MAC & CHEESE FIRE CHICKEN\n";
+    text += "\x1D\x21\x00"; // normal lagi
+
+    text += "Jl. Sawo Manila No.1\n";
+    text += "RT.009/RW.010, Jati Padang\n";
+    text += "Pasar Minggu, Jakarta Selatan\n";
+    text += "12540\n";
+    text += "Sebrang UNAS (Universitas Nasional)\n";
 
     text += "--------------------------------\n";
+
+    // 🔥 BALIK KE KIRI
     text += "\x1B\x61\x00";
 
     text += `Customer: ${order.customerName}\n`;
     text += `Bayar   : ${order.paymentType}\n`;
+
     text += "--------------------------------\n";
 
+    // ITEM LIST
     order.items.forEach((item) => {
       const total = item.qty * item.price;
+
       text += `${item.name}\n`;
+
       text += leftRight(
         `${item.qty} x ${item.price}`,
         total.toLocaleString("id-ID"),
@@ -61,17 +76,22 @@ export default function Order_Sent() {
 
     text += "--------------------------------\n";
 
+    // TOTAL
     text += "\x1B\x45\x01";
     text += leftRight("TOTAL", `Rp ${order.totalPrice}`);
     text += "\x1B\x45\x00";
 
+    // FOOTER
     text += "\x1B\x61\x01";
     text += "Terima kasih 🙏\n\n\n";
+
+    // 🔥 AUTO CUT
+    text += "\x1D\x56\x41\x10";
 
     const encoded = encodeURIComponent(text);
 
     // 🔥 AUTO PRINT (tanpa buka UI)
-    window.location.href = `rawbt:print?text=${encoded}&silent=true`;
+    window.location.href = `intent:print?text=${encoded}#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;`;
   };
 
   useEffect(() => {
