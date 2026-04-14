@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+
+//import { useReactToPrint } from "react-to-print";
 import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
@@ -25,23 +25,77 @@ import { db } from "../firebase";
 export default function Order_Sent() {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const receiptRef = useRef();
 
   // 1. Ubah konfigurasi useReactToPrint agar lebih stabil
-  const handlePrint = useReactToPrint({
-    contentRef: receiptRef, // Gunakan contentRef untuk versi terbaru react-to-print
-    onAfterPrint: () => setSelectedOrder(null), // Reset setelah cetak
-  });
+  const handlePrintBluetooth = (order) => {
+    const lineWidth = 32;
 
-  // 2. Fungsi penangan klik yang lebih aman
-  const onPrintButtonClick = (order) => {
-    setSelectedOrder(order);
-    // Berikan sedikit delay (macrotask) agar React sempat merender Receipt
-    setTimeout(() => {
-      handlePrint();
-    }, 100);
+    const leftRight = (left, right) => {
+      const space = lineWidth - left.length - right.length;
+      return left + " ".repeat(space > 0 ? space : 1) + right + "\n";
+    };
+
+    let text = "";
+
+    text += "\x1B\x40";
+    text += "\x1B\x61\x01";
+    text += "\x1B\x45\x01";
+    text += "UMAR DRINKS\n";
+    text += "\x1B\x45\x00";
+
+    text += "--------------------------------\n";
+    text += "\x1B\x61\x00";
+
+    text += `Customer: ${order.customerName}\n`;
+    text += `Bayar   : ${order.paymentType}\n`;
+    text += "--------------------------------\n";
+
+    order.items.forEach((item) => {
+      const total = item.qty * item.price;
+      text += `${item.name}\n`;
+      text += leftRight(
+        `${item.qty} x ${item.price}`,
+        total.toLocaleString("id-ID"),
+      );
+    });
+
+    text += "--------------------------------\n";
+
+    text += "\x1B\x45\x01";
+    text += leftRight("TOTAL", `Rp ${order.totalPrice}`);
+    text += "\x1B\x45\x00";
+
+    text += "\x1B\x61\x01";
+    text += "Terima kasih 🙏\n\n\n";
+
+    const encoded = encodeURIComponent(text);
+
+    // 🔥 AUTO PRINT (tanpa buka UI)
+    window.location.href = `rawbt:print?text=${encoded}&silent=true`;
   };
+
+  useEffect(() => {
+    if (orders.length === 0) return;
+
+    const autoPrint = async () => {
+      const newOrders = orders.filter((order) => order.hasNewOrder === true);
+
+      for (const order of newOrders) {
+        // 🔥 PRINT OTOMATIS
+        handlePrintBluetooth(order);
+
+        // 🔥 kasih delay biar tidak tabrakan (PENTING)
+        await new Promise((res) => setTimeout(res, 1500));
+
+        // 🔥 update biar tidak print ulang
+        await updateDoc(doc(db, "orders", order.id), {
+          hasNewOrder: false,
+        });
+      }
+    };
+
+    autoPrint();
+  }, [orders]);
 
   // Ambil data order dari Firestore (REALTIME)
   useEffect(() => {
@@ -148,7 +202,10 @@ export default function Order_Sent() {
 
                   {/* BUTTON PRINT MUNCUL JIKA COMPLETED */}
                   {order.status === "completed" && (
-                    <Button size="sm" onClick={() => onPrintButtonClick(order)}>
+                    <Button
+                      size="sm"
+                      onClick={() => handlePrintBluetooth(order)}
+                    >
                       Print
                     </Button>
                   )}
@@ -165,19 +222,6 @@ export default function Order_Sent() {
             </Card.Body>
           </Card>
         ))
-      )}
-
-      {/* 🔥 STRUK PRINT (PALING BAWAH) */}
-      {selectedOrder && (
-        <div
-          style={{
-            position: "absolute",
-            top: "-10000px",
-            left: "-10000px",
-          }}
-        >
-          <Receipt ref={receiptRef} order={selectedOrder} />
-        </div>
       )}
     </Container>
   );
