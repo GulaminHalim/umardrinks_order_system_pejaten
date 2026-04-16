@@ -42,23 +42,31 @@ export default function Order_Sent() {
 
     // 🔥 HEADER ATAS
     text += "\x1B\x61\x01"; // center
+    text += "\x1B\x45\x01"; // bold ON
     text += "\x1D\x21\x11"; // double size
-    text += "UMAR DRINKS POTATO BOLOGNESE MAC & CHEESE FIRE CHICKEN\n";
-    text += "\x1D\x21\x00"; // normal lagi
 
+    text += "♥ UMAR DRINKS ♥\n";
+
+    text += "\x1D\x21\x00"; // normal size
+    text += "\x1B\x45\x00"; // bold OFF
+
+    text += "POTATO BOLOGNESE\n";
+    text += "MAC & CHEESE\n";
+    text += "FIRE CHICKEN POPCORN\n";
+
+    text += "\n";
     text += "Jl. Sawo Manila No.1\n";
-    text += "RT.009/RW.010, Jati Padang\n";
-    text += "Pasar Minggu, Jakarta Selatan\n";
-    text += "12540\n";
-    text += "Sebrang UNAS (Universitas Nasional)\n";
-
-    text += "--------------------------------\n";
+    text += "Jati Padang, Pasar Minggu\n";
+    text += "Jakarta Selatan\n";
+    text += "(Seberang Gerbang UNAS)\n";
+    text += "0858-912-66106\n";
+    text += "================================\n";
 
     // 🔥 BALIK KE KIRI
     text += "\x1B\x61\x00";
 
-    text += `Customer: ${order.customerName}\n`;
-    text += `Bayar   : ${order.paymentType}\n`;
+    text += `Customer Name: ${order.customerName}\n`;
+    text += `Payment Method: ${order.paymentType}\n`;
 
     text += "--------------------------------\n";
 
@@ -69,7 +77,7 @@ export default function Order_Sent() {
       text += `${item.name}\n`;
 
       text += leftRight(
-        `${item.qty} x ${item.price}`,
+        `${item.qty} x ${item.price.toLocaleString("id-ID")}`,
         total.toLocaleString("id-ID"),
       );
     });
@@ -78,7 +86,10 @@ export default function Order_Sent() {
 
     // TOTAL
     text += "\x1B\x45\x01";
-    text += leftRight("TOTAL", `Rp ${order.totalPrice}`);
+    text += leftRight(
+      "TOTAL",
+      `Rp ${Number(order.totalPrice).toLocaleString("id-ID")}`,
+    );
     text += "\x1B\x45\x00";
 
     // FOOTER
@@ -88,10 +99,8 @@ export default function Order_Sent() {
     // 🔥 AUTO CUT
     text += "\x1D\x56\x41\x10";
 
-    const encoded = encodeURIComponent(text);
-
     // 🔥 AUTO PRINT (tanpa buka UI)
-    window.location.href = `intent:print?text=${encoded}#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;`;
+    window.location.href = `intent://print?text=${encodeURIComponent(text)}#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;`;
   };
 
   useEffect(() => {
