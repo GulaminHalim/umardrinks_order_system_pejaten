@@ -26,6 +26,19 @@ export default function Order_Sent() {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
+  const formatDateTime = (timestamp) => {
+    if (!timestamp) return "-";
+
+    const date = timestamp.toDate(); // convert Firestore Timestamp
+    return date.toLocaleString("id-ID", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   // 1. Ubah konfigurasi useReactToPrint agar lebih stabil
   const handlePrintBluetooth = (order) => {
     const lineWidth = 32;
@@ -45,7 +58,7 @@ export default function Order_Sent() {
     text += "\x1B\x45\x01"; // bold ON
     text += "\x1D\x21\x11"; // double size
 
-    text += "<3 UMAR DRINKS <3\n";
+    text += "UMAR DRINKS\n";
 
     text += "\x1D\x21\x00"; // normal size
     text += "\x1B\x45\x00"; // bold OFF
@@ -59,7 +72,9 @@ export default function Order_Sent() {
     text += "Jati Padang, Pasar Minggu\n";
     text += "Jakarta Selatan\n";
     text += "(Seberang Gerbang UNAS)\n";
-    text += "0858-912-66106\n";
+    text += "0858-912-66106\n\n\n";
+
+    text += leftRight("Tanggal", formatDateTime(order.createdAt));
     text += "================================\n";
 
     // 🔥 BALIK KE KIRI
@@ -68,7 +83,7 @@ export default function Order_Sent() {
     text += `Customer Name: ${order.customerName}\n`;
     text += `Payment Method: ${order.paymentType}\n`;
 
-    text += "--------------------------------\n";
+    text += "================================\n";
 
     // ITEM LIST
     order.items.forEach((item) => {
@@ -82,7 +97,7 @@ export default function Order_Sent() {
       );
     });
 
-    text += "--------------------------------\n";
+    text += "================================\n";
 
     // TOTAL
     text += "\x1B\x45\x01";
@@ -94,13 +109,14 @@ export default function Order_Sent() {
 
     // FOOTER
     text += "\x1B\x61\x01";
-    text += "Terima kasih 🙏\n\n\n";
+    text += "Selamat Menikmati\n";
+    text += "Selamat Datang Kembali\n\n\n";
 
     // 🔥 AUTO CUT
     text += "\x1D\x56\x41\x10";
 
     // 🔥 AUTO PRINT (tanpa buka UI)
-    window.location.href = `intent://print?text=${encodeURIComponent(text)}#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;`;
+    window.location.href = `rawbt://print?text=${encodeURIComponent(text)}`;
   };
 
   useEffect(() => {
@@ -166,19 +182,6 @@ export default function Order_Sent() {
 
     await updateDoc(orderRef, {
       status: "completed",
-    });
-  };
-
-  const formatDateTime = (timestamp) => {
-    if (!timestamp) return "-";
-
-    const date = timestamp.toDate(); // convert Firestore Timestamp
-    return date.toLocaleString("id-ID", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     });
   };
 
