@@ -45,7 +45,7 @@ export default function Order_Sent() {
     text += "\x1B\x45\x01"; // bold ON
     text += "\x1D\x21\x11"; // double size
 
-    text += "♥ UMAR DRINKS ♥\n";
+    text += "<3 UMAR DRINKS <3\n";
 
     text += "\x1D\x21\x00"; // normal size
     text += "\x1B\x45\x00"; // bold OFF
