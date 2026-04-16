@@ -106,12 +106,13 @@ export default function Order_Sent() {
       `Rp ${Number(order.totalPrice).toLocaleString("id-ID")}`,
     );
     text += "\x1B\x45\x00";
-    text += "\n\n\n";
+
+    text += "\n\n";
 
     // FOOTER
     text += "\x1B\x61\x01";
     text += "Selamat Menikmati\n";
-    text += "Selamat Datang Kembali\n\n\n";
+    text += "Selamat Datang Kembali\n";
 
     // 🔥 AUTO CUT
     text += "\x1D\x56\x41\x10";
