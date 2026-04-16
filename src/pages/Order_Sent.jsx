@@ -106,6 +106,7 @@ export default function Order_Sent() {
       `Rp ${Number(order.totalPrice).toLocaleString("id-ID")}`,
     );
     text += "\x1B\x45\x00";
+    text += "\n\n\n";
 
     // FOOTER
     text += "\x1B\x61\x01";
