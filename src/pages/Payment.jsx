@@ -17,8 +17,11 @@ import Thankyou from "./Thankyou.jsx";
 export default function Payment() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [customerName, setCustomerName] = useState("");
   const [orderSuccess, setOrderSuccess] = useState(false);
+
+  // default pembayaran
   const [paymentType, setPaymentType] = useState("cash");
 
   function alertToOrderSent() {
@@ -30,13 +33,20 @@ export default function Payment() {
     });
   }
 
+  const cartItems = useSelector((state) => state.cart.items);
+
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0,
+  );
+
   const handleOrder = async () => {
     try {
       await addDoc(collection(db, "orders"), {
-        customerName: customerName,
-        paymentType: paymentType,
+        customerName,
+        paymentType,
         items: cartItems,
-        totalPrice: totalPrice,
+        totalPrice,
         status: "pending",
         hasNewOrder: true,
         createdAt: serverTimestamp(),
@@ -46,16 +56,11 @@ export default function Payment() {
       dispatch(clearCart());
       localStorage.removeItem("welcomeModalShown");
       setOrderSuccess(true);
-
-      // alert("Order berhasil dikirim ke kasir, \nSilahkan tunggu konfirmasi dari kasir!");
     } catch (error) {
       console.error("Gagal menyimpan order:", error);
       alert("Terjadi kesalahan");
     }
   };
-
-  // Ambil data cart dari Redux
-  const cartItems = useSelector((state) => state.cart.items);
 
   if (orderSuccess) {
     return <Navigate to="/order_sent" replace />;
@@ -65,15 +70,8 @@ export default function Payment() {
     return <Navigate to="/" />;
   }
 
-  // Hitung total
-  const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0,
-  );
-
   return (
     <Container className="py-4" style={{ maxWidth: "600px" }}>
-      {/* BACK BUTTON */}
       <Button
         variant="link"
         className="d-flex align-items-center gap-2 mb-3 text-decoration-none"
@@ -82,100 +80,108 @@ export default function Payment() {
         <ArrowLeft size={20} />
         Back to Menu
       </Button>
+
       <h2 className="text-center mb-4 fw-bold">Checkout</h2>
 
-      {cartItems.length === 0 ? (
-        <p className="text-center text-muted">Keranjang masih kosong</p>
-      ) : (
-        <Card className="shadow-sm">
-          <ListGroup variant="flush">
-            {cartItems.map((item) => (
-              <ListGroup.Item
-                key={item.id}
-                className="d-flex justify-content-between align-items-center"
-              >
-                <div>
-                  <strong>{item.name}</strong>
-                  <div className="text-muted">
-                    {item.qty} x Rp {item.price}
-                  </div>
+      <Card className="shadow-sm">
+        <ListGroup variant="flush">
+          {cartItems.map((item) => (
+            <ListGroup.Item
+              key={item.id}
+              className="d-flex justify-content-between align-items-center"
+            >
+              <div>
+                <strong>{item.name}</strong>
+                <div className="text-muted">
+                  {item.qty} x Rp {item.price}
                 </div>
+              </div>
 
-                <div className="d-flex align-items-center gap-2">
-                  <span className="fw-bold">Rp {item.price * item.qty}</span>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => dispatch(removeFromCart(item.id))}
-                  >
-                    ✕
-                  </Button>
-                </div>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
+              <div className="d-flex align-items-center gap-2">
+                <span className="fw-bold">Rp {item.price * item.qty}</span>
 
-          <Card.Body>
-            <div className="d-flex justify-content-between mb-3">
-              <h5>Total</h5>
-              <h5 className="fw-bold">Rp {totalPrice}</h5>
-            </div>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => dispatch(removeFromCart(item.id))}
+                >
+                  ✕
+                </Button>
+              </div>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
 
-            <Form className="mb-3">
-              <Form.Group className="mb-3">
-                <Form.Label>Tipe Pembayaran</Form.Label>
+        <Card.Body>
+          <div className="d-flex justify-content-between mb-3">
+            <h5>Total</h5>
+            <h5 className="fw-bold">Rp {totalPrice}</h5>
+          </div>
 
-                <div>
-                  <Form.Check
-                    type="radio"
-                    label="Cash"
-                    name="paymentType"
-                    value="cash"
-                    checked={paymentType === "cash"}
-                    onChange={(e) => setPaymentType(e.target.value)}
-                  />
+          <Form className="mb-3">
+            <Form.Group className="mb-3">
+              <Form.Label>Tipe Pembayaran</Form.Label>
 
-                  <Form.Check
-                    type="radio"
-                    label="QRIS"
-                    name="paymentType"
-                    value="qris"
-                    checked={paymentType === "qris"}
-                    onChange={(e) => setPaymentType(e.target.value)}
-                  />
-                </div>
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Nama Pemesan</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Masukkan nama"
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
+              <div>
+                <Form.Check
+                  type="radio"
+                  label="Cash"
+                  name="paymentType"
+                  value="cash"
+                  checked={paymentType === "cash"}
+                  onChange={(e) => setPaymentType(e.target.value)}
                 />
-              </Form.Group>
-            </Form>
 
-            <Button
-              variant="success"
-              className="w-100 mb-2"
-              disabled={!customerName}
-              onClick={handleOrder}
-            >
-              Send Order
-            </Button>
+                <Form.Check
+                  type="radio"
+                  label="QRIS"
+                  name="paymentType"
+                  value="qris"
+                  checked={paymentType === "qris"}
+                  onChange={(e) => setPaymentType(e.target.value)}
+                />
 
-            <Button
-              variant="outline-danger"
-              className="w-100"
-              onClick={() => dispatch(clearCart())}
-            >
-              Cancel Order
-            </Button>
-          </Card.Body>
-        </Card>
-      )}
+                <Form.Check
+                  type="radio"
+                  label="GoPay"
+                  name="paymentType"
+                  value="gopay"
+                  checked={paymentType === "gopay"}
+                  onChange={(e) => setPaymentType(e.target.value)}
+                />
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Nama Pemesan</Form.Label>
+
+              <Form.Control
+                type="text"
+                placeholder="Masukkan nama"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+
+          <Button
+            variant="success"
+            className="w-100 mb-2"
+            disabled={!customerName}
+            onClick={handleOrder}
+          >
+            Send Order
+          </Button>
+
+          <Button
+            variant="outline-danger"
+            className="w-100"
+            onClick={() => dispatch(clearCart())}
+          >
+            Cancel Order
+          </Button>
+        </Card.Body>
+      </Card>
     </Container>
   );
 }
