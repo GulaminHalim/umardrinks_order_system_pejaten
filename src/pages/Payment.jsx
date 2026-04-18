@@ -63,7 +63,7 @@ export default function Payment() {
   };
 
   if (orderSuccess) {
-    return <Navigate to="/thankyou" replace />;
+    return <Navigate to="/order_sent" replace />;
   }
 
   if (cartItems.length === 0) {
