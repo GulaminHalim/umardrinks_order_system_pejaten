@@ -117,8 +117,10 @@ export default function Order_Sent() {
     // 🔥 AUTO CUT
     text += "\x1D\x56\x41\x10";
 
-    // 🔥 AUTO PRINT (tanpa buka UI)
-    window.location.href = `rawbt://print?text=${encodeURIComponent(text)}`;
+    // 🔥 AUTO PRINT
+    window.location.href =
+      `intent://print?text=${encodeURIComponent(text)}` +
+      "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
   };
 
   useEffect(() => {
