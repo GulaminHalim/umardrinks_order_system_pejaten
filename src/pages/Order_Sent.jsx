@@ -118,12 +118,7 @@ export default function Order_Sent() {
     text += "\x1D\x56\x41\x10";
 
     // 🔥 AUTO PRINT
-    const url =
-      "intent://print?text=" +
-      encodeURIComponent(text) +
-      "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
-
-    window.open(url, "_self");
+    window.location.href = `intent:${encodeURIComponent(text)}#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;`;
   };
 
   useEffect(() => {
