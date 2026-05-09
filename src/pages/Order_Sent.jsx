@@ -123,7 +123,7 @@ export default function Order_Sent() {
       encodeURIComponent(text) +
       "#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
 
-    window.location.href = url;
+    window.open(url, "_self");
   };
 
   useEffect(() => {
