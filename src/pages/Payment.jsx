@@ -19,7 +19,7 @@ export default function Payment() {
   const navigate = useNavigate();
 
   const [customerName, setCustomerName] = useState("");
-  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [latestOrder, setLatestOrder] = useState(null);
 
   // default pembayaran
   const [paymentType, setPaymentType] = useState("cash");
@@ -42,31 +42,36 @@ export default function Payment() {
 
   const handleOrder = async () => {
     try {
-      await addDoc(collection(db, "orders"), {
+      const orderData = {
         customerName,
         paymentType,
         items: cartItems,
         totalPrice,
         status: "pending",
         hasNewOrder: true,
+        createdAt: new Date(),
+      };
+
+      await addDoc(collection(db, "orders"), {
+        ...orderData,
         createdAt: serverTimestamp(),
       });
 
       alertToOrderSent();
+
       dispatch(clearCart());
+
       localStorage.removeItem("welcomeModalShown");
-      // kasih waktu firestore sync realtime
-      setTimeout(() => {
-        setOrderSuccess(true);
-      }, 1500);
+
+      setLatestOrder(orderData);
     } catch (error) {
       console.error("Gagal menyimpan order:", error);
       alert("Terjadi kesalahan");
     }
   };
 
-  if (orderSuccess) {
-    return <Navigate to="/thankyou" replace />;
+  if (latestOrder) {
+    return <Navigate to="/thankyou" replace state={{ order: latestOrder }} />;
   }
 
   if (cartItems.length === 0) {
