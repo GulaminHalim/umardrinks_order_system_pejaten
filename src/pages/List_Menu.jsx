@@ -115,15 +115,7 @@ export default function List_Menu() {
           <p className="text-center text-muted">Menu tidak ditemukan...</p>
         )}
       </Row>
-      {filteredMenu.length > 0 && (
-        <Button
-          id="checkout-main"
-          className="btn-modern w-100 mt-3"
-          onClick={handleCheckout}
-        >
-          Checkout
-        </Button>
-      )}
+
       {/* MODAL */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
@@ -162,14 +154,11 @@ export default function List_Menu() {
       </Modal>
       {filteredMenu.length > 0 && (
         <Button
+          variant=""
           className="floating-checkout"
-          onClick={() => {
-            const target = document.getElementById("checkout-main");
-            target?.scrollIntoView({ behavior: "smooth" });
-          }}
+          onClick={handleCheckout}
         >
-          <ShoppingCart size={16} className="me-2" />
-          Checkout
+          <ShoppingCart size={24} />
         </Button>
       )}
     </Container>
