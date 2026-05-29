@@ -55,7 +55,10 @@ export default function Payment() {
       alertToOrderSent();
       dispatch(clearCart());
       localStorage.removeItem("welcomeModalShown");
-      setOrderSuccess(true);
+      // kasih waktu firestore sync realtime
+      setTimeout(() => {
+        setOrderSuccess(true);
+      }, 1500);
     } catch (error) {
       console.error("Gagal menyimpan order:", error);
       alert("Terjadi kesalahan");
