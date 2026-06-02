@@ -7,19 +7,6 @@ export default function Thankyou() {
 
   const order = location.state?.order;
 
-  const formatDateTime = (timestamp) => {
-    if (!timestamp) return "-";
-
-    const date = timestamp.toDate(); // convert Firestore Timestamp
-    return date.toLocaleString("id-ID", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   useEffect(() => {
     if (!order) return;
 
@@ -54,7 +41,6 @@ export default function Thankyou() {
     text += "(Seberang Gerbang UNAS)\n";
     text += "0858-912-66106\n\n\n";
 
-    text += leftRight("Tanggal", formatDateTime(order.createdAt));
     text += "================================\n";
 
     text += "\x1B\x61\x00";
