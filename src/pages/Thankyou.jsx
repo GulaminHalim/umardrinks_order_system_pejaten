@@ -37,9 +37,26 @@ export default function Thankyou() {
     text += "\n";
     text += "Jl. Sawo Manila No.1\n";
     text += "Jati Padang, Pasar Minggu\n";
-    text += "Jakarta Selatan\n\n";
+    text += "Jakarta Selatan\n";
     text += "(Seberang Gerbang UNAS)\n";
-    text += "0858-912-66106\n\n\n";
+    text += "0858-912-66106\n\n";
+
+    // Tanggal & Waktu
+    const now = new Date();
+
+    const tanggal = now.toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    const waktu = now.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+
+    text += leftRight(tanggal, waktu);
 
     text += "================================\n";
 
