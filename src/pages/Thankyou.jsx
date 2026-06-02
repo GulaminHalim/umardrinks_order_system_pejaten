@@ -7,6 +7,19 @@ export default function Thankyou() {
 
   const order = location.state?.order;
 
+  const formatDateTime = (timestamp) => {
+    if (!timestamp) return "-";
+
+    const date = timestamp.toDate(); // convert Firestore Timestamp
+    return date.toLocaleString("id-ID", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   useEffect(() => {
     if (!order) return;
 
@@ -30,15 +43,24 @@ export default function Thankyou() {
     text += "\x1D\x21\x00";
     text += "\x1B\x45\x00";
 
-    text += "Jl. Sawo Manila No.1\n";
-    text += "Jakarta Selatan\n\n";
+    text += "POTATO BOLOGNESE\n";
+    text += "MAC & CHEESE\n";
+    text += "FIRE CHICKEN POPCORN\n";
 
+    text += "\n";
+    text += "Jl. Sawo Manila No.1\n";
+    text += "Jati Padang, Pasar Minggu\n";
+    text += "Jakarta Selatan\n\n";
+    text += "(Seberang Gerbang UNAS)\n";
+    text += "0858-912-66106\n\n\n";
+
+    text += leftRight("Tanggal", formatDateTime(order.createdAt));
     text += "================================\n";
 
     text += "\x1B\x61\x00";
 
-    text += `Customer: ${order.customerName}\n`;
-    text += `Payment: ${order.paymentType}\n`;
+    text += `Customer Name: ${order.customerName}\n`;
+    text += `Payment Method: ${order.paymentType}\n`;
 
     text += "================================\n";
 
@@ -60,7 +82,8 @@ export default function Thankyou() {
     text += "\n\n";
 
     text += "\x1B\x61\x01";
-    text += "Terima Kasih\n";
+    text += "Selamat Menikmati\n";
+    text += "Selamat Datang Kembali\n";
 
     text += "\x1D\x56\x41\x10";
 
