@@ -1,56 +1,57 @@
-import image1 from "../assets/images/image1.jpeg";
-import image2 from "../assets/images/image2.jpeg";
-import image3 from "../assets/images/image3.png";
+//import image1 from "../assets/images/image1.jpeg";
+//import image2 from '../assets/images/image2.jpeg';
+import image3 from '../assets/images/image3.png';
+import image4 from '../assets/images/image4.jpg';
 
 export const data_order_list = [
   {
     id: 1,
-    name: "Potato bolognese mac & cheese fire chicken",
+    name: 'Potato bolognese mac & cheese fire chicken',
     price: 20000,
-    image: image1,
+    image: image4,
     komposisi:
-      "Kentang, saus bolognese, macaroni, saus keju, ayam goreng, saus sambal",
+      'Kentang, saus bolognese, macaroni, saus keju, ayam goreng, saus sambal',
   },
   {
     id: 2,
-    name: "Potato bolognese fire chicken",
+    name: 'Potato bolognese fire chicken',
     price: 20000,
-    image: image1,
-    komposisi: "Kentang, saus bolognese, ayam goreng, saus sambal",
+    image: image4,
+    komposisi: 'Kentang, saus bolognese, ayam goreng, saus sambal',
   },
   {
     id: 3,
-    name: "Mac & cheese fire chicken",
+    name: 'Mac & cheese fire chicken',
     price: 20000,
-    image: image1,
-    komposisi: "Macaroni, saus keju,ayam goreng, saus sambal",
+    image: image4,
+    komposisi: 'Macaroni, saus keju,ayam goreng, saus sambal',
   },
   {
     id: 4,
-    name: "Potato bolognese mac & cheese",
+    name: 'Potato bolognese mac & cheese',
     price: 15000,
-    image: image2,
-    komposisi: "Kentang, saus bolognese, macaroni, saus keju ",
+    image: image4,
+    komposisi: 'Kentang, saus bolognese, macaroni, saus keju ',
   },
   {
     id: 5,
-    name: "Potato bolognese",
+    name: 'Potato bolognese',
     price: 15000,
-    image: image2,
-    komposisi: "Kentang, suas bolognese",
+    image: image4,
+    komposisi: 'Kentang, suas bolognese',
   },
   {
     id: 6,
-    name: "Mac & cheese",
+    name: 'Mac & cheese',
     price: 15000,
-    image: image2,
-    komposisi: "Macaroni, saus keju",
+    image: image4,
+    komposisi: 'Macaroni, saus keju',
   },
   {
     id: 7,
-    name: "Fire chicken",
+    name: 'Fire chicken',
     price: 1000,
     image: image3,
-    komposisi: "Ayam popcorn goreng, saus sambal",
+    komposisi: 'Ayam popcorn goreng, saus sambal',
   },
 ];
